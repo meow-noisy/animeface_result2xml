@@ -9,12 +9,9 @@ import sys
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import json
-import xmljson
 import imghdr
 import copy
 from pprint import pprint as print
-import dicttoxml
-from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
 
 from PIL import Image
