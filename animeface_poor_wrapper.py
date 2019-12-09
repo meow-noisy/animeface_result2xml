@@ -18,7 +18,7 @@ def detect_animeface(im_path):
     im_path = Path(im_path).resolve()
     assert im_path.exists()
 
-    ruby_script_path = this_file_dir / 'animeface-2009/animeface-ruby/sample.rb'
+    ruby_script_path = this_file_dir / 'animeface2009/animeface-ruby/sample.rb'
     ret = subprocess.check_output(["ruby", str(ruby_script_path), str(im_path)]).decode('utf-8')
 
     ret = ret.replace("=>", ":")
