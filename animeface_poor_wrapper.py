@@ -18,7 +18,7 @@ def detect_animeface(im_path):
     im_path = Path(im_path).resolve()
     assert im_path.exists()
 
-    ruby_script_path = this_file_dir / 'animeface2009/animeface-ruby/sample.rb'
+    ruby_script_path = this_file_dir / 'animeface-2009/animeface-ruby/sample.rb'
     ret = subprocess.check_output(["ruby", str(ruby_script_path), str(im_path)]).decode('utf-8')
 
     ret = ret.replace("=>", ":")
@@ -26,7 +26,7 @@ def detect_animeface(im_path):
     ret = ret.replace("#", "\"")
     # delete original 2 lines
     #ret = ret.replace("\n1 faces\nSee sample_out.png\n", '')
-    ret = re.sub(r"\n.+ faces\nSee .+\n", '', ret)
+    #ret = re.sub(r"\n.+ faces\nSee .+\n", '', ret)
     # print(im_path, ret)
     dic = json.loads(ret)
 
