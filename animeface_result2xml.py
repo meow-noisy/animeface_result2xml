@@ -18,7 +18,7 @@ from PIL import Image
 
 this_file_dir = (Path(__file__).resolve()).parent
 
-from animeface_poor_wrapper import detect_animeface
+from animeface_poor_caller import detect_animeface
 
 
 def image_validator(im_path, valid_img=['png', 'jpeg', 'gif']):
@@ -42,7 +42,10 @@ def mk_bbox(src_d):
 
 
 def generate_output_file_name(file_path, xml_output_dir):
-    
+    xml_output_dir = Path(xml_output_dir)
+    if not xml_output_dir.exists():
+        xml_output_dir.mkdir(exist_ok=True, parents=True)
+
     file_path = (str(file_path)).split('/')
     file_path = file_path[1:]
     file_path = Path(xml_output_dir) / '/'.join(file_path)
@@ -93,7 +96,7 @@ def insert_det_result_to_template(det_result_list, tgt_xml, im_size):
     tgt_xml[4][1].text = str(h)
 
     for det_result in det_result_list:
-        print(det_result)
+        # print(det_result)
         d = mk_bbox(det_result["face"])
         _add_elem("face", d, tgt_xml)
         
@@ -129,14 +132,14 @@ def convert_bbox2xml(image_dir, xml_output_dir, output_filelist_path):
     assert image_dir.exists(), image_dir
 
     # import pdb; pdb.set_trace()
-
+    file_list = []
     for file_path in image_dir.glob('**/*'):
-        print(file_path)
         if file_path.is_dir():
             continue
         if not image_validator(file_path):
             continue
-
+        print('now detecting: ' + str(file_path))        
+        file_list.append(str(file_path))    
         tree = ET.parse(str(template_path))
         element_root = tree.getroot()
 
@@ -151,6 +154,8 @@ def convert_bbox2xml(image_dir, xml_output_dir, output_filelist_path):
 
         tree.write(str(output_file_name), encoding='utf-8', xml_declaration=False)
 
+    with open(output_filelist_path, "w") as f:
+        f.write('\n'.join(file_list))
 
 if __name__ == '__main__':
     argvs = sys.argv
